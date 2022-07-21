@@ -4,9 +4,11 @@ import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import lesson5_demo.Product;
 
-public class DemoConnect {
+public class DemoSelect {
     public static void main(String[] args) {
         try {
             // B1: Load driver để kết nối tới CDSL
@@ -22,23 +24,25 @@ public class DemoConnect {
             System.out.println("Kết nối thành công");
             
             // B3: Tạo PreparedStatement & set tham số
-//            String query = "SELECT * FROM san_pham";
-            Product p = new Product(0, "Ao dai tay", "BLACK", 20, 99, 1);
-            String query = "INSERT INTO san_pham"
-                    + "(ten, so_luong, mau_sac, don_gia, danh_muc_id)"
-                    + "VALUES (?, ?, ?, ?, ?)";
-            //                 1  2  3  4  5
+            String query = "SELECT * FROM san_pham";
 
             PreparedStatement ps = conn.prepareStatement(query);
-            
-            ps.setString(1, p.getTenSP());
-            ps.setInt(2, p.getSoLuong());
-            ps.setString(3, p.getMauSac());
-            ps.setDouble(4, p.getDonGia());
-            ps.setInt(5, p.getCategoryId());
 
             // B4: Thực thi
             ps.execute();
+            
+            ResultSet rs = ps.getResultSet();
+            ArrayList<Product> listProduct = new ArrayList<>();
+            while (rs.next() == true) {
+                int id = rs.getInt("id");
+                String ten = rs.getString("ten");
+                int soLg = rs.getInt("so_luong");
+                String mau = rs.getString("mau_sac");
+                double gia = rs.getDouble("don_gia");
+                int danhMucId = rs.getInt("danh_muc_id");
+                Product p = new Product(id, ten, mau, soLg, gia, danhMucId);
+                listProduct.add(p);
+            }
             
             // B5: Đóng kết nối
             conn.close();
