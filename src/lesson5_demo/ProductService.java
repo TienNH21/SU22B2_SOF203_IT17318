@@ -3,44 +3,29 @@ package lesson5_demo;
 import java.util.ArrayList;
 
 public class ProductService {
-    private ArrayList<Product> listProd;
+    private ProductRepository prodRepo;
 
     public ProductService() {
-        this.listProd = new ArrayList<>();
+        this.prodRepo = new ProductRepository();
     }
     
     public void insert(Product p)
     {
-        this.listProd.add(p);
+        this.prodRepo.insert(p);
     }
     
     public void update(int id, Product p)
     {
-        for (int idx = 0; idx < listProd.size(); idx++) {
-            Product prod = this.listProd.get(idx);
-            if (prod.getId() == id) {
-                this.listProd.set(idx, p);
-            }
-        }
+        this.prodRepo.update(id, p);
     }
 
     public void delete(int id)
     {
-        for (int i = 0; i < listProd.size(); i++) {
-            Product prod = this.listProd.get(i);
-            if (prod.getId() == id) {
-                this.listProd.remove(i);
-            }
-        }
+        this.prodRepo.delete(id);
     }
     
     public ArrayList<Product> getList()
     {
-        return this.listProd;
-    }
-    
-    public void setList(ArrayList<Product> list)
-    {
-        this.listProd = list;
+        return this.prodRepo.all();
     }
 }
